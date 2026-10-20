@@ -6,6 +6,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/src/server.js",
+    "start:render": "npx prisma db push --schema prisma/schema.prisma && node dist/prisma/seed-demo.js && npx tsx src/server.ts",
     "test": "node --test",
     "seed:prod": "node dist/prisma/seed-demo.js",
     "typecheck": "tsc --noEmit",
