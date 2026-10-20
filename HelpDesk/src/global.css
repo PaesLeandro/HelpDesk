@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme static {
+     --font-sans: "Lato", sans-serif;
+
+     /* Brand colors */
+     --color-blue-dark: #2E3DA3;
+     --color-blue-base: #5165E1;
+     --color-blue-light: #8996EB;
+
+     /* Gray scale */
+     --color-gray-100: #151619;
+     --color-gray-200: #1E2024;
+     --color-gray-300: #535964;
+     --color-gray-400: #858B99;
+     --color-gray-500: #E3E5E8;
+     --color-gray-600: #F9FAFA;
+
+    /* Feedback colors */
+    --color-feedback-danger: #D03E3E;
+    --color-feedback-open: #CC3D6A;
+    --color-feedback-progress: #355EC5;
+    --color-feedback-done: #508B26;
+
+    /* Typography */
+    --text-xl: 24px;
+    --text-xl--line-height: 1.4;
+    --text-lg: 20px;
+    --text-lg--line-height: 1.4;
+    --text-md: 16px;
+    --text-md--line-height: 1.4;
+    --text-sm: 14px;
+    --text-sm--line-height: 1.4;
+    --text-xs: 12px;
+    --text-xs--line-height: 1.4;
+    --text-xxs: 10px;
+    --text-xxs--line-height: 1.4;
+}
+
+html {
+    font-family: var(--font-sans);
+}
+
+.text-xl,
+.text-lg,
+.heading-md,
+.heading-md-bold,
+.text-sm,
+.text-sm-bold,
+.text-xs,
+.text-xs-bold,
+.text-xxs {
+    line-height: 1.4;
+}
+
+.text-xl {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.text-lg {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.heading-md,
+.heading-md-bold {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.text-sm,
+.text-sm-bold {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.text-xs,
+.text-xs-bold {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.heading-md-bold,
+.text-sm-bold,
+.text-xs-bold {
+    font-weight: 700;
+}
+
+.text-xxs {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
