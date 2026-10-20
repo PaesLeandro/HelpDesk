@@ -20,4 +20,4 @@ COPY --from=build /app/prisma ./prisma
 RUN npx prisma generate
 RUN mkdir -p /app/tmp/uploads
 EXPOSE 3333
-CMD ["npx", "tsx", "src/server.ts"]
+CMD ["sh", "-c", "npx prisma db push --schema prisma/schema.prisma && node dist/prisma/seed-demo.js && npx tsx src/server.ts"]

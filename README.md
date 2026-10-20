@@ -82,3 +82,5 @@ Nunca coloque `JWT_SECRET`, `DATABASE_URL` de produção ou senhas reais nas var
 - Cliente: abre chamados, vê o próprio histórico e os detalhes.
 
 As rotas exigem autenticação, exceto `POST /users`, `POST /sessions` e `GET /health`.
+
+Use a URL do PostgreSQL somente na variável DATABASE_URL do Render. Nunca salve credenciais do banco no README ou no GitHub.
