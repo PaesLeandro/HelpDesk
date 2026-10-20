@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: helpdesk-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: helpdesk
+      POSTGRES_USER: helpdesk
+      POSTGRES_PASSWORD: helpdesk
+    ports:
+      - "5432:5432"
+    volumes:
+      - helpdesk-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U helpdesk -d helpdesk"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: ./backend/api
+    container_name: helpdesk-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://helpdesk:helpdesk@postgres:5432/helpdesk?schema=public
+      JWT_SECRET: ${JWT_SECRET:-local-development-secret-change-me}
+      PORT: 3333
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-demo1234}
+    ports:
+      - "3333:3333"
+    volumes:
+      - helpdesk-uploads:/app/tmp
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "npx prisma db push --schema prisma/schema.prisma && npm run seed:prod && npx tsx src/server.ts"
+
+  frontend:
+    build:
+      context: ./HelpDesk
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3333}
+    container_name: helpdesk-frontend
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  helpdesk-postgres-data:
+  helpdesk-uploads:

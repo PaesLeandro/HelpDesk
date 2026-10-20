@@ -1,0 +1,112 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  employee
+  manager
+  admin
+  technician
+  client
+}
+
+enum TicketStatus {
+  open
+  in_progress
+  closed
+}
+
+enum Category {
+  food
+  others
+  services
+  transport
+  accommodation
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String 
+  profileImage String?
+  mustChangePassword Boolean @default(false)
+  availability String @default("[]")
+    
+  role UserRole @default(client)
+
+  refunds Refunds[]
+  ticketsAsClient Ticket[] @relation("TicketClient")
+  ticketsAsTechnician Ticket[] @relation("TicketTechnician")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Refunds {
+  id String @id @default(uuid())
+  name String
+  amount Float @map("amount")
+  category Category
+  filename String
+
+  userId String @map("user_id")
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("refunds")
+}
+
+model Service {
+  id String @id @default(uuid())
+  title String @unique
+  price Float
+  active Boolean @default(true)
+  tickets Ticket[]
+  ticketServices TicketService[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ticket {
+  id String @unique @default(uuid())
+  number Int @id @default(autoincrement())
+  title String
+  description String
+  status TicketStatus @default(open)
+  amount Float
+
+  serviceId String
+  service Service @relation(fields: [serviceId], references: [id])
+  clientId String
+  client User @relation("TicketClient", fields: [clientId], references: [id], onDelete: Cascade)
+  technicianId String?
+  technician User? @relation("TicketTechnician", fields: [technicianId], references: [id])
+  ticketServices TicketService[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TicketService {
+  id String @id @default(uuid())
+  ticketId String
+  serviceId String
+  price Float
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([ticketId, serviceId])
+}
